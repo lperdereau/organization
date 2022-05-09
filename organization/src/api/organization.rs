@@ -6,28 +6,28 @@ use super::ApiError;
 
 #[get("/organizations/")]
 async fn list(filters: web::Query<Params>) -> Result<HttpResponse, ApiError> {
-    info!("GET /users/");
+    info!("GET /organizations/");
     let organizations = Organization::find_all(filters.into_inner())?;
     Ok(HttpResponse::Ok().json(organizations))
 }
 
 #[post("/organizations/")]
 async fn create(organization: web::Json<OrganizationMessage>) -> Result<HttpResponse, ApiError> {
-    info!("POST /users/");
+    info!("POST /organizations/");
     let organization = Organization::create(organization.into_inner())?;
     Ok(HttpResponse::Created().json(organization))
 }
 
 #[get("/organizations/{id}/")]
 async fn get(id: web::Path<uuid::Uuid>) -> Result<HttpResponse, ApiError> {
-    info!("GET /users/{id}/");
+    info!("GET /organizations/{id}/");
     let organization = Organization::find(id.into_inner())?;
     Ok(HttpResponse::Ok().json(organization))
 }
 
 #[delete("/organizations/{id}/")]
 async fn delete(id: web::Path<uuid::Uuid>) -> Result<HttpResponse, ApiError> {
-    info!("DELETE /users/{id}/");
+    info!("DELETE /organizations/{id}/");
     let num_deleted = Organization::delete(id.into_inner())?;
     Ok(HttpResponse::NoContent().json(json!({ "deleted": num_deleted })))
 }
