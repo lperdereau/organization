@@ -35,7 +35,7 @@ pub struct Response {
 impl User {
     pub fn find_all(params: Params) -> Result<Response, ApiError> {
         let conn = db::connection()?;
-        let mut query = users::table.into_boxed();
+        let query = users::table.into_boxed();
 
         let (users, total_pages) = query
             .load_with_pagination(&conn, params.page, params.page_size)?;

@@ -1,5 +1,4 @@
 use super::super::db;
-use super::super::db::LoadPaginated;
 use super::super::schema::users_organizations;
 use diesel::prelude::*;
 use diesel::{Associations, QueryDsl, Queryable, RunQueryDsl};

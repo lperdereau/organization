@@ -16,3 +16,7 @@ cargo build
 ```
 ./target/debug/organization-cli -s http://localhost:8080 organization list
 ```
+
+
+# Note Dockerfile is built for aarch64
+To change for x86_64 juste replace it in Dockerfile

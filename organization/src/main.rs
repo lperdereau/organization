@@ -27,7 +27,7 @@ pub async fn main() -> std::io::Result<()>{
             .configure(user::init_routes)
             .configure(group::init_routes)
     })
-    .bind(&format!("{}:{}", config.ip, config.port))?;
+    .bind(server_addr)?;
 
     info!("Starting server");
     info!("Listening: http://{}/", server_addr);

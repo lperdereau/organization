@@ -13,7 +13,10 @@ pub fn matches(matches: &ArgMatches, server_url: Url) {
     let endpoint_url = server_url.join("/organizations/");
     match matches.subcommand() {
         Some(("list", sub_matches)) => {
-            let organizations = super::action::list(endpoint_url.unwrap());
+            super::action::list(endpoint_url.unwrap());
+        }
+        Some(("get", sub_matches)) => {
+            super::action::get(endpoint_url.unwrap());
         }
         _ => unreachable!(),
     }

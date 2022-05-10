@@ -21,7 +21,6 @@ fn cli_list() -> Command<'static> {
                 .help("Pagination index of organization ressource.")
                 .takes_value(true),
         )
-        .arg_required_else_help(true)
 }
 
 fn cli_get() -> Command<'static> {
@@ -85,7 +84,16 @@ fn build_table(organizations: Vec<Organiaztion>) -> String {
 pub fn list(endpoint_url: reqwest::Url) {
     match super::requests::list(endpoint_url) {
         Ok(organizations) => {
-            println!("{}", build_table(organizations.results));
+            print!("{}", build_table(organizations.results));
+        }
+        Err(_) => (),
+    }
+}
+
+pub fn get(endpoint_url: reqwest::Url, id: uuid::Uuid) {
+    match super::requests::get(endpoint_url, id) {
+        Ok(organizations) => {
+            print!("{}", build_table(vec!(organizations)));
         }
         Err(_) => (),
     }

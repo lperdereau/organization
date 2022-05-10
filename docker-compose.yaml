@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+  postgres:
+    # We use our own image in order to have the right locals, see postgresql-image/Dockerfile
+    image: bitnami/postgresql:13
+    environment:
+      POSTGRESQL_PASSWORD: postgres
+      POSTGRESQL_POSTGRES_PASSWORD: postgres
+      POSTGRESQL_DATABASE: organization
+    ports:
+      - "5432:5432"
+    networks:
+      - organization
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      IP: 0.0.0.0
+      PORT: 8000
+      DATABASE_URL: "postgres://postgres:postgres@postgres:5432/organization"
+    ports:
+      - "8000:8000"
+    networks:
+      - organization
+    depends_on:
+    - postgres
+networks:
+  organization:
+    driver: bridge
