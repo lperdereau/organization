@@ -20,8 +20,8 @@ pub fn list(endpoint_url: Url) -> Result<Response, Box<dyn std::error::Error>>{
     Ok(body)
 }
 
-pub fn get(endpoint_url: Url, id : uuid::Uuid) -> Result<Organiaztion, Box<dyn std::error::Error>>{
-    let endpoint = endpoint_url.join(&id.to_string())?;
+pub fn get(endpoint_url: Url, id : &str) -> Result<Organiaztion, Box<dyn std::error::Error>>{
+    let endpoint = endpoint_url.join(format!("{}/", id).as_str())?;
     debug!("Fetch {endpoint}");
     let body: Organiaztion = reqwest::blocking::get(endpoint)?
         .json::<Organiaztion>()?;

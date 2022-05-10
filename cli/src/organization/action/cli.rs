@@ -90,7 +90,7 @@ pub fn list(endpoint_url: reqwest::Url) {
     }
 }
 
-pub fn get(endpoint_url: reqwest::Url, id: uuid::Uuid) {
+pub fn get(endpoint_url: reqwest::Url, id: &str) {
     match super::requests::get(endpoint_url, id) {
         Ok(organizations) => {
             print!("{}", build_table(vec!(organizations)));
