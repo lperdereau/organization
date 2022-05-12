@@ -1,7 +1,7 @@
 #!/bin/sh
 
 mkdir -p /tmp/linux-gnu/
-ldd /organization | grep so \
+ldd $1 | grep so \
 | sed -e '/^[^\t]/ d' \
 | sed -e 's/\t//' \
 | sed -e 's/.*=..//' \

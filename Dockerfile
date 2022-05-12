@@ -7,7 +7,7 @@ FROM debian AS builder
 RUN apt update && apt install --yes libpq5
 COPY --from=builder-rust /app/target/release/organization /
 COPY copy-so-files.sh /
-RUN sh /copy-so-files.sh
+RUN sh /copy-so-files.sh /organization
 
 FROM gcr.io/distroless/cc
 COPY --from=builder /tmp/linux-gnu/ /lib/aarch64-linux-gnu/
