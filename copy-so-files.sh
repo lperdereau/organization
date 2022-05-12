@@ -1,0 +1,15 @@
+#!/bin/sh
+
+mkdir -p /tmp/linux-gnu/
+ldd /organization | grep so \
+| sed -e '/^[^\t]/ d' \
+| sed -e 's/\t//' \
+| sed -e 's/.*=..//' \
+| sed -e 's/ (0.*)//' \
+| sed -e 's/linux-vdso.so.1//' \
+| grep -v -e '^[[:space:]]*$' \
+| sort \
+| uniq \
+| while read in; do
+    cp "$in" /tmp/linux-gnu/
+done
