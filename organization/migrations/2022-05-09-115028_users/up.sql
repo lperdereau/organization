@@ -6,7 +6,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE users_organizations (
-  user_id uuid REFERENCES users(id),
-  organization_id uuid REFERENCES organizations(id),
+  user_id uuid REFERENCES users(id) ON DELETE CASCADE,
+  organization_id uuid REFERENCES organizations(id) ON DELETE CASCADE,
   PRIMARY KEY (user_id, organization_id)
 );

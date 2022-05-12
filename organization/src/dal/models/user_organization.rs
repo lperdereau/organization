@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::api::ApiError;
 
-#[derive(Queryable, Debug, Associations, Insertable, Deserialize, Serialize)]
+#[derive(Queryable, Insertable, Debug, Associations, Deserialize, Serialize)]
 #[belongs_to(super::user::User)]
 #[belongs_to(super::organization::Organization)]
 #[table_name = "users_organizations"]
@@ -17,6 +17,7 @@ pub struct UserOrganization {
 
 #[derive(Debug, Deserialize)]
 pub struct Params {
+    pub organization_id: uuid::Uuid,
     pub page: Option<i64>,
     pub page_size: Option<i64>,
 }

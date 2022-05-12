@@ -1,5 +1,5 @@
-use actix_web::{web, get, post, delete, HttpResponse};
-use crate::dal::models::user::{User, Params, UserMessage};
+use crate::dal::models::user::{Params, User, UserMessage};
+use actix_web::{delete, get, post, web, HttpResponse};
 use serde_json::json;
 
 use super::ApiError;

@@ -14,7 +14,7 @@ pub fn cli() -> Command<'static> {
 pub fn matches(matches: &ArgMatches, server_url: Url) {
     let endpoint_url = server_url.join("/organizations/");
     match matches.subcommand() {
-        Some(("list", sub_matches)) => {
+        Some(("list", _sub_matches)) => {
             action::list(endpoint_url.unwrap());
         }
         Some(("get", sub_matches)) => {

@@ -1,5 +1,9 @@
-use actix_web::{web, get, post, delete, HttpResponse};
-use crate::dal::models::group::{Group, Params, GroupMessage};
+use crate::dal::models::{
+    group::{Group, GroupMessage, Params},
+    user::User,
+    user_group::{self, UserGroup},
+};
+use actix_web::{delete, get, post, web, HttpResponse};
 use serde_json::json;
 
 use super::ApiError;
@@ -32,9 +36,31 @@ async fn delete(id: web::Path<uuid::Uuid>) -> Result<HttpResponse, ApiError> {
     Ok(HttpResponse::NoContent().json(json!({ "deleted": num_deleted })))
 }
 
+#[post("/groups/{group_id}/add/{user_id}/")]
+async fn add(message: web::Path<UserGroup>) -> Result<HttpResponse, ApiError> {
+    info!("POST /groups/{}/add/{}/", message.group_id, message.user_id);
+    let message = message.into_inner();
+    let result = UserGroup::create(UserGroup {
+        user_id: message.user_id,
+        group_id: message.group_id,
+    })?;
+    Ok(HttpResponse::Created().json(result))
+}
+
+#[get("/groups/{group_id}/members/")]
+async fn members(
+    params: web::Path<user_group::Params>,
+) -> Result<HttpResponse, ApiError> {
+    info!("GET /groups/{}/members/", params.group_id);
+    let result = User::group_member(params.into_inner())?;
+    Ok(HttpResponse::Created().json(result))
+}
+
 pub fn init_routes(cfg: &mut web::ServiceConfig) {
     cfg.service(list);
     cfg.service(create);
     cfg.service(get);
     cfg.service(delete);
+    cfg.service(add);
+    cfg.service(members);
 }
