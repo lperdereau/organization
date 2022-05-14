@@ -1,5 +1,5 @@
 use crate::dal::models::{
-    organization::{Organization, OrganizationMessage, Params},
+    organization::{Organization, NewOrganization, Params},
     user_organization::UserOrganization,
     user::User,
 };
@@ -15,7 +15,7 @@ async fn list(filters: web::Query<Params>) -> Result<HttpResponse, ApiError> {
 }
 
 #[post("/organizations/")]
-async fn create(organization: web::Json<OrganizationMessage>) -> Result<HttpResponse, ApiError> {
+async fn create(organization: web::Json<NewOrganization>) -> Result<HttpResponse, ApiError> {
     let organization = Organization::create(organization.into_inner())?;
     Ok(HttpResponse::Created().json(organization))
 }

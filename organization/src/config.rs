@@ -20,7 +20,7 @@ pub struct Config {
 
     /// Max elements per page
     #[clap(long, env, default_value = "50")]
-    pub max_elements_per_page: u8,
+    pub page_limit: u8,
 }
 
 lazy_static! {

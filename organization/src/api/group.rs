@@ -1,5 +1,5 @@
 use crate::dal::models::{
-    group::{Group, GroupMessage, Params},
+    group::{Group, NewGroup, Params},
     user::User,
     user_group::{self, UserGroup},
 };
@@ -15,7 +15,7 @@ async fn list(filters: web::Query<Params>) -> Result<HttpResponse, ApiError> {
 }
 
 #[post("/groups/")]
-async fn create(group: web::Json<GroupMessage>) -> Result<HttpResponse, ApiError> {
+async fn create(group: web::Json<NewGroup>) -> Result<HttpResponse, ApiError> {
     let group = Group::create(group.into_inner())?;
     Ok(HttpResponse::Created().json(group))
 }

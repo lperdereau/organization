@@ -1,14 +1,14 @@
 use super::super::db::{self, Paginate};
 use super::super::schema::groups;
+use super::Response;
 use diesel::prelude::*;
 use diesel::{Associations, Identifiable, QueryDsl, Queryable, RunQueryDsl};
 use serde::{Deserialize, Serialize};
 
 use crate::api::ApiError;
 
-#[derive(Serialize, Deserialize, Debug, AsChangeset)]
-#[table_name = "groups"]
-pub struct GroupMessage {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct NewGroup {
     pub organization_id: uuid::Uuid,
     pub name: String,
 }
@@ -28,14 +28,8 @@ pub struct Params {
     pub page_size: Option<i64>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Response {
-    results: Vec<Group>,
-    total_pages: i64,
-}
-
 impl Group {
-    pub fn find_all(params: Params) -> Result<Response, ApiError> {
+    pub fn find_all(params: Params) -> Result<Response<Group>, ApiError> {
         let conn = db::connection()?;
         let mut query = groups::table
             .into_boxed()
@@ -55,7 +49,7 @@ impl Group {
         })
     }
 
-    pub fn create(group: GroupMessage) -> Result<Self, ApiError> {
+    pub fn create(group: NewGroup) -> Result<Self, ApiError> {
         let conn = db::connection()?;
 
         let group = Group::from(group);
@@ -83,8 +77,8 @@ impl Group {
     }
 }
 
-impl From<GroupMessage> for Group {
-    fn from(group: GroupMessage) -> Self {
+impl From<NewGroup> for Group {
+    fn from(group: NewGroup) -> Self {
         Group {
             id: uuid::Uuid::new_v4(),
             name: group.name,

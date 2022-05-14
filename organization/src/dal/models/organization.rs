@@ -1,14 +1,14 @@
 use super::super::db::{self, Paginate};
 use super::super::schema::organizations;
+use super::Response;
 use diesel::prelude::*;
 use diesel::{Associations, Identifiable, QueryDsl, Queryable, RunQueryDsl};
 use serde::{Deserialize, Serialize};
 
 use crate::api::ApiError;
 
-#[derive(Serialize, Deserialize, Debug, AsChangeset)]
-#[table_name = "organizations"]
-pub struct OrganizationMessage {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct NewOrganization {
     pub name: String,
 }
 
@@ -25,14 +25,8 @@ pub struct Params {
     pub page_size: Option<i64>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Response {
-    results: Vec<Organization>,
-    total_pages: i64,
-}
-
 impl Organization {
-    pub fn find_all(params: Params) -> Result<Response, ApiError> {
+    pub fn find_all(params: Params) -> Result<Response<Organization>, ApiError> {
         let conn = db::connection()?;
         let mut query = organizations::table
             .into_boxed()
@@ -52,7 +46,7 @@ impl Organization {
         })
     }
 
-    pub fn create(organization: OrganizationMessage) -> Result<Self, ApiError> {
+    pub fn create(organization: NewOrganization) -> Result<Self, ApiError> {
         let conn = db::connection()?;
 
         let organization = Organization::from(organization);
@@ -83,8 +77,8 @@ impl Organization {
     }
 }
 
-impl From<OrganizationMessage> for Organization {
-    fn from(organization: OrganizationMessage) -> Self {
+impl From<NewOrganization> for Organization {
+    fn from(organization: NewOrganization) -> Self {
         Organization {
             id: uuid::Uuid::new_v4(),
             name: organization.name,

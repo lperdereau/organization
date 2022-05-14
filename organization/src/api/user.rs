@@ -1,4 +1,4 @@
-use crate::dal::models::user::{Params, User, UserMessage};
+use crate::dal::models::user::{Params, User, NewUser};
 use actix_web::{delete, get, post, web, HttpResponse};
 use serde_json::json;
 
@@ -11,7 +11,7 @@ async fn list(filters: web::Query<Params>) -> Result<HttpResponse, ApiError> {
 }
 
 #[post("/users/")]
-async fn create(user: web::Json<UserMessage>) -> Result<HttpResponse, ApiError> {
+async fn create(user: web::Json<NewUser>) -> Result<HttpResponse, ApiError> {
     let user = User::create(user.into_inner())?;
     Ok(HttpResponse::Created().json(user))
 }

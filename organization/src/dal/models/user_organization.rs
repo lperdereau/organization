@@ -22,12 +22,6 @@ pub struct Params {
     pub page_size: Option<i64>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Response {
-    results: Vec<UserOrganization>,
-    total_pages: i64,
-}
-
 impl UserOrganization {
     pub fn create(user_organization: UserOrganization) -> Result<Self, ApiError> {
         let conn = db::connection()?;

@@ -1,5 +1,6 @@
 use super::super::db::{self, Paginate};
 use super::super::schema::users;
+use super::Response;
 use super::user_group::UserGroup;
 use super::user_organization::UserOrganization;
 use diesel::prelude::*;
@@ -9,9 +10,8 @@ use serde::{Deserialize, Serialize};
 use crate::api::ApiError;
 use crate::dal::schema::{users_organizations, users_groups};
 
-#[derive(Serialize, Deserialize, Debug, AsChangeset)]
-#[table_name = "users"]
-pub struct UserMessage {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct NewUser {
     pub name: String,
 }
 
@@ -28,14 +28,8 @@ pub struct Params {
     pub page_size: Option<i64>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Response {
-    results: Vec<User>,
-    total_pages: i64,
-}
-
 impl User {
-    pub fn find_all(params: Params) -> Result<Response, ApiError> {
+    pub fn find_all(params: Params) -> Result<Response<User>, ApiError> {
         let conn = db::connection()?;
         let mut query = users::table
             .into_boxed()
@@ -55,7 +49,7 @@ impl User {
         })
     }
 
-    pub fn create(user: UserMessage) -> Result<Self, ApiError> {
+    pub fn create(user: NewUser) -> Result<Self, ApiError> {
         let conn = db::connection()?;
 
         let user = User::from(user);
@@ -84,7 +78,7 @@ impl User {
 
     pub fn organization_member(
         params: super::user_organization::Params,
-    ) -> Result<Response, ApiError> {
+    ) -> Result<Response<User>, ApiError> {
         let conn = db::connection()?;
 
         let mut query = users_organizations::table
@@ -112,7 +106,7 @@ impl User {
 
     pub fn group_member(
         params: super::user_group::Params,
-    ) -> Result<Response, ApiError> {
+    ) -> Result<Response<User>, ApiError> {
         let conn = db::connection()?;
 
         let mut query = users_groups::table
@@ -139,8 +133,8 @@ impl User {
     }
 }
 
-impl From<UserMessage> for User {
-    fn from(user: UserMessage) -> Self {
+impl From<NewUser> for User {
+    fn from(user: NewUser) -> Self {
         User {
             id: uuid::Uuid::new_v4(),
             name: user.name,
