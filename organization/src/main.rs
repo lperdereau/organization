@@ -5,7 +5,7 @@ extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
 
-use actix_web::{App, HttpServer};
+use actix_web::{App, HttpServer, middleware::Logger};
 mod dal;
 mod api;
 mod config;
@@ -21,6 +21,7 @@ pub async fn main() -> std::io::Result<()>{
     let server_addr = &format!("{}:{}", CONFIG.ip, CONFIG.port);
     let server = HttpServer::new(|| {
         App::new()
+            .wrap(Logger::default())
             .configure(organization::init_routes)
             .configure(user::init_routes)
             .configure(group::init_routes)
