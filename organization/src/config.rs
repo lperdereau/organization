@@ -1,3 +1,4 @@
+use lazy_static::lazy_static;
 use clap::Parser;
 
 const APP_TITLE: &str = "Organization";
@@ -16,4 +17,12 @@ pub struct Config {
     /// Database URL (with credentials)
     #[clap(long, env, hide_env_values = true)]
     pub database_url: String,
+
+    /// Max elements per page
+    #[clap(long, env, default_value = "50")]
+    pub max_elements_per_page: u8,
+}
+
+lazy_static! {
+    pub static ref CONFIG: Config = Config::parse();
 }

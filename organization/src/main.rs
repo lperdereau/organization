@@ -6,21 +6,19 @@ extern crate diesel;
 extern crate diesel_migrations;
 
 use actix_web::{App, HttpServer};
-use clap::Parser;
-
 mod dal;
 mod api;
 mod config;
 
 use api::{organization, user, group};
+use config::CONFIG;
 
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()>{
-    let config = config::Config::parse();
     env_logger::init();
     dal::db::init();
 
-    let server_addr = &format!("{}:{}", config.ip, config.port);
+    let server_addr = &format!("{}:{}", CONFIG.ip, CONFIG.port);
     let server = HttpServer::new(|| {
         App::new()
             .configure(organization::init_routes)
