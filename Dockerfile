@@ -10,6 +10,7 @@ COPY copy-so-files.sh /
 RUN sh /copy-so-files.sh /organization
 
 FROM gcr.io/distroless/cc
-COPY --from=builder /tmp/linux-gnu/ /lib/aarch64-linux-gnu/
+ENV LD_LIBRARY_PATH=/lib/linux-gnu/
+COPY --from=builder /tmp/linux-gnu/ /lib/linux-gnu/
 COPY --from=builder-rust /app/target/release/organization /
 CMD ["/organization"]
