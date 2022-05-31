@@ -23,6 +23,15 @@ pub struct Params {
 }
 
 impl UserOrganization {
+    pub fn create_multiple(user_organizations: Vec<UserOrganization>) -> Result<Vec<Self>, ApiError> {
+        let conn = db::connection()?;
+        diesel::insert_into(users_organizations::table)
+            .values(&user_organizations)
+            .execute(&conn)?;
+
+        Ok(user_organizations)
+    }
+
     pub fn create(user_organization: UserOrganization) -> Result<Self, ApiError> {
         let conn = db::connection()?;
 

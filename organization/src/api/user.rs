@@ -1,5 +1,6 @@
 use crate::dal::models::user::{Params, User, NewUser};
-use actix_web::{delete, get, post, web, HttpResponse};
+use actix_web::{delete, get, post, HttpResponse, web::ServiceConfig};
+use paperclip::actix::web;
 use serde_json::json;
 
 use super::ApiError;
@@ -28,7 +29,7 @@ async fn delete(id: web::Path<uuid::Uuid>) -> Result<HttpResponse, ApiError> {
     Ok(HttpResponse::NoContent().json(json!({ "deleted": num_deleted })))
 }
 
-pub fn init_routes(cfg: &mut web::ServiceConfig) {
+pub fn init_routes(cfg: &mut ServiceConfig) {
     cfg.service(list);
     cfg.service(create);
     cfg.service(get);

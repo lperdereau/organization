@@ -1,14 +1,14 @@
 use super::super::db::{self, Paginate};
 use super::super::schema::users;
-use super::Response;
 use super::user_group::UserGroup;
 use super::user_organization::UserOrganization;
+use super::Response;
 use diesel::prelude::*;
 use diesel::{Associations, Identifiable, QueryDsl, Queryable, RunQueryDsl};
 use serde::{Deserialize, Serialize};
 
 use crate::api::ApiError;
-use crate::dal::schema::{users_organizations, users_groups};
+use crate::dal::schema::{users_groups, users_organizations};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct NewUser {
@@ -104,9 +104,7 @@ impl User {
         })
     }
 
-    pub fn group_member(
-        params: super::user_group::Params,
-    ) -> Result<Response<User>, ApiError> {
+    pub fn group_member(params: super::user_group::Params) -> Result<Response<User>, ApiError> {
         let conn = db::connection()?;
 
         let mut query = users_groups::table
@@ -120,8 +118,7 @@ impl User {
             query = query.per_page(min(page_size, 25));
         }
 
-        let (users_vec, total_pages) =
-            query.load_and_count_pages::<(UserGroup, User)>(&conn)?;
+        let (users_vec, total_pages) = query.load_and_count_pages::<(UserGroup, User)>(&conn)?;
         Ok(Response {
             results: users_vec
                 .into_iter()
