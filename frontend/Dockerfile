@@ -1,5 +1,5 @@
 # Build app
-FROM node:13.11.0 AS build
+FROM node:16.16.0 AS build
 
 WORKDIR /tmp/app/
 
@@ -18,7 +18,7 @@ LABEL app.name=app
 RUN rm -v /etc/nginx/nginx.conf
 
 COPY misc/nginx.conf /etc/nginx/
-COPY misc/configuration.json /var/www/.well-known/
-COPY --from=build /tmp/bundle /var/www/
+COPY misc/.well-known/ /var/www/
+COPY --from=build /tmp/app/dist /var/www/
 
 CMD ["nginx", "-g", "daemon off;"]

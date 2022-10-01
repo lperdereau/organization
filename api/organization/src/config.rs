@@ -21,6 +21,10 @@ pub struct Config {
     /// Max elements per page
     #[clap(long, env, default_value = "50")]
     pub page_limit: u8,
+
+    /// Allowed Orgins separate by comma
+    #[clap(long, env, default_value = "*")]
+    pub allowed_origins: String,
 }
 
 lazy_static! {

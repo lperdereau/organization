@@ -1,0 +1,12 @@
+*
+!package*
+!env.d.ts
+!index.html
+!misc
+!public
+!src
+!tsconfig.app.json
+!tsconfig.config.json
+!tsconfig.json
+!tsconfig.vitest.json
+!vite.config.ts

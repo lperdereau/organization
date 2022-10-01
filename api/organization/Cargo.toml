@@ -10,6 +10,7 @@ keywords = ["organization"]
 
 [dependencies]
 actix-web = { version = "4" }
+actix-cors = { version = "0.6.3" }
 clap = { version = "3.1.16", features = ["derive", "env", "cargo", "wrap_help"] }
 diesel = { version = "1.4.8", features = ["postgres", "uuid", "r2d2"] }
 diesel_migrations = "1.4.0"

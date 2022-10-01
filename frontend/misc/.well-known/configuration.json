@@ -1,0 +1,5 @@
+{
+    "apiOrganization": {
+        "baseUrl": "http://localhost:8000/"
+    }
+}
