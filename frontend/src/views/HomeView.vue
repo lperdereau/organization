@@ -1,14 +1,26 @@
 <template>
-  <span>Hello</span>
+  <span class="text-3xl">Hello</span>
 </template>
 
 <script setup lang="ts">
+import { watch } from "@vue/runtime-core";
 import { useQuery } from "vue-query";
-
 import { getOrganizations } from "@/services/organization";
+import { notifyError } from "@/store/notifications";
 
-const { isLoading, isError, isFetching, data, error, refetch } = useQuery(
+const { isError, data, suspense } = useQuery(
   "organizations",
-  getOrganizations
+  getOrganizations,
+  {
+    retry: 0,
+  }
 );
+
+watch(isError, () => {
+  if (isError) {
+    notifyError();
+  }
+});
+
+await suspense();
 </script>
